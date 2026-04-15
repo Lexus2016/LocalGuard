@@ -4,6 +4,7 @@ $ErrorActionPreference = "Stop"
 
 $Repo = "Lexus2016/LocalGuard"
 $Binary = "llm-security-proxy"
+$DataDir = Join-Path $env:USERPROFILE ".llm-proxy"
 
 # --- Detect architecture ---
 $Arch = if ([Environment]::Is64BitOperatingSystem) { "x86_64" } else {
@@ -36,16 +37,29 @@ Write-Host "Downloading ${Asset}..."
 Invoke-WebRequest -Uri $Url -OutFile (Join-Path $TmpDir $Asset)
 
 # --- Extract ---
-# Use tar (available on Windows 10+)
+Write-Host "Extracting..."
 tar xzf (Join-Path $TmpDir $Asset) -C $TmpDir
 
-# --- Install ---
+# --- Install binary ---
 $InstallDir = Join-Path $env:LOCALAPPDATA "LocalGuard"
 New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
 
 $ExePath = Join-Path $TmpDir "${Binary}.exe"
 $DestPath = Join-Path $InstallDir "${Binary}.exe"
 Move-Item -Force $ExePath $DestPath
+Write-Host "Binary installed to ${DestPath}"
+
+# --- Install NER models ---
+$ModelsSource = Join-Path $TmpDir "models"
+$ModelsDir = Join-Path $DataDir "models"
+
+if (Test-Path $ModelsSource) {
+    New-Item -ItemType Directory -Force -Path $ModelsDir | Out-Null
+    Copy-Item -Force -Path (Join-Path $ModelsSource "*") -Destination $ModelsDir
+    Write-Host "Models installed to ${ModelsDir}"
+} else {
+    Write-Host "Note: No models/ directory in archive (regex-only scanning available)."
+}
 
 # --- Add to PATH (user-level) ---
 $UserPath = [Environment]::GetEnvironmentVariable("Path", "User")
@@ -62,6 +76,7 @@ Write-Host ""
 Write-Host "LocalGuard v${Version} installed successfully!"
 Write-Host ""
 Write-Host "Next steps:"
-Write-Host "  1. Start:    ${Binary} start"
-Write-Host "  2. Buy:      https://llm-proxy.gumroad.com"
-Write-Host "  3. Activate: ${Binary} activate"
+Write-Host "  1. Run setup: ${Binary} setup"
+Write-Host "  2. Purchase:  https://llm-proxy.gumroad.com"
+Write-Host "  3. Activate:  ${Binary} activate"
+Write-Host "  4. Start:     ${Binary} start"

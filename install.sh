@@ -5,6 +5,7 @@ set -e
 
 REPO="Lexus2016/LocalGuard"
 BINARY="llm-security-proxy"
+DATA_DIR="${HOME}/.llm-proxy"
 
 # --- Detect OS and architecture ---
 OS="$(uname -s)"
@@ -55,23 +56,24 @@ TMPDIR=$(mktemp -d)
 curl -fSL "$URL" -o "${TMPDIR}/${ASSET}"
 
 # --- Extract ---
+echo "Extracting..."
 tar xzf "${TMPDIR}/${ASSET}" -C "${TMPDIR}"
 
-# --- Install ---
+# --- Install binary ---
 INSTALL_DIR="/usr/local/bin"
 
 if [ -w "$INSTALL_DIR" ]; then
     mv "${TMPDIR}/${BINARY}" "${INSTALL_DIR}/${BINARY}"
-    echo "Installed to ${INSTALL_DIR}/${BINARY}"
+    echo "Binary installed to ${INSTALL_DIR}/${BINARY}"
 elif command -v sudo >/dev/null 2>&1; then
-    echo "Installing to ${INSTALL_DIR} (requires sudo)..."
+    echo "Installing binary to ${INSTALL_DIR} (requires sudo)..."
     sudo mv "${TMPDIR}/${BINARY}" "${INSTALL_DIR}/${BINARY}"
-    echo "Installed to ${INSTALL_DIR}/${BINARY}"
+    echo "Binary installed to ${INSTALL_DIR}/${BINARY}"
 else
     INSTALL_DIR="${HOME}/.local/bin"
     mkdir -p "$INSTALL_DIR"
     mv "${TMPDIR}/${BINARY}" "${INSTALL_DIR}/${BINARY}"
-    echo "Installed to ${INSTALL_DIR}/${BINARY}"
+    echo "Binary installed to ${INSTALL_DIR}/${BINARY}"
     case ":$PATH:" in
         *":${INSTALL_DIR}:"*) ;;
         *)
@@ -84,6 +86,18 @@ fi
 
 chmod +x "${INSTALL_DIR}/${BINARY}"
 
+# --- Install NER models ---
+MODELS_DIR="${DATA_DIR}/models"
+mkdir -p "$MODELS_DIR"
+
+if [ -d "${TMPDIR}/models" ]; then
+    echo "Installing NER models to ${MODELS_DIR}..."
+    cp -f "${TMPDIR}/models/"* "${MODELS_DIR}/"
+    echo "Models installed: $(ls "${MODELS_DIR}" | tr '\n' ' ')"
+else
+    echo "Note: No models/ directory in archive (regex-only scanning available)."
+fi
+
 # --- Cleanup ---
 rm -rf "$TMPDIR"
 
@@ -91,6 +105,7 @@ echo ""
 echo "LocalGuard v${LATEST} installed successfully!"
 echo ""
 echo "Next steps:"
-echo "  1. Start:    ${BINARY} start"
-echo "  2. Buy:      https://llm-proxy.gumroad.com"
-echo "  3. Activate: ${BINARY} activate"
+echo "  1. Run setup: ${BINARY} setup"
+echo "  2. Purchase:  https://llm-proxy.gumroad.com"
+echo "  3. Activate:  ${BINARY} activate"
+echo "  4. Start:     ${BINARY} start"
