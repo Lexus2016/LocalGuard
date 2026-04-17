@@ -1,6 +1,6 @@
 # LocalGuard
 
-Transparent HTTP proxy that redacts secrets and PII before they reach LLM providers. Your API keys, passwords, credit cards, and personal data never leave your machine.
+**[localguard.me](https://localguard.me)** — Transparent HTTP proxy that redacts secrets and PII before they reach LLM providers. Your API keys, passwords, credit cards, and personal data never leave your machine.
 
 ## What it does
 
@@ -15,6 +15,19 @@ LocalGuard sits between your application and the LLM API. It automatically detec
 
 ## Install
 
+### Desktop App (GUI)
+
+Download the desktop app for your platform:
+
+| Platform | Download |
+|----------|----------|
+| macOS (Apple Silicon) | [LocalGuard.dmg](https://github.com/Lexus2016/LocalGuard/releases/latest) |
+| macOS (Intel) | [LocalGuard.dmg](https://github.com/Lexus2016/LocalGuard/releases/latest) |
+| Windows | [LocalGuard.msi](https://github.com/Lexus2016/LocalGuard/releases/latest) |
+| Linux | [LocalGuard.AppImage](https://github.com/Lexus2016/LocalGuard/releases/latest) / [.deb](https://github.com/Lexus2016/LocalGuard/releases/latest) |
+
+### CLI (Command Line)
+
 **macOS / Linux:**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Lexus2016/LocalGuard/main/install.sh | sh
@@ -27,6 +40,38 @@ irm https://raw.githubusercontent.com/Lexus2016/LocalGuard/main/install.ps1 | ie
 
 The installer downloads the binary **and** the NER model (~200MB total). Everything works out of the box after installation.
 
+### Manual install
+
+Download the archive for your platform from [Releases](https://github.com/Lexus2016/LocalGuard/releases/latest), extract it, and place the binary in your PATH.
+
+**macOS (Apple Silicon):**
+```bash
+tar xzf llm-security-proxy-*-aarch64-apple-darwin.tar.gz
+sudo mv llm-security-proxy /usr/local/bin/
+```
+
+**macOS (Intel):**
+```bash
+tar xzf llm-security-proxy-*-x86_64-apple-darwin.tar.gz
+sudo mv llm-security-proxy /usr/local/bin/
+```
+
+**Linux (x86_64):**
+```bash
+tar xzf llm-security-proxy-*-x86_64-unknown-linux-gnu.tar.gz
+sudo mv llm-security-proxy /usr/local/bin/
+```
+
+**Linux (ARM64):**
+```bash
+tar xzf llm-security-proxy-*-aarch64-unknown-linux-gnu.tar.gz
+sudo mv llm-security-proxy /usr/local/bin/
+```
+
+**Windows:**
+1. Download `llm-security-proxy-*-x86_64-pc-windows-msvc.tar.gz`
+2. Extract and add the folder to your PATH
+
 ## Quick Start
 
 ### 1. Run interactive setup
@@ -37,9 +82,9 @@ llm-security-proxy setup
 
 The setup wizard will ask which LLM providers you use and create a config file automatically.
 
-### 2. Get a license
+### 2. Get a license (optional)
 
-Purchase at [llm-proxy.gumroad.com](https://llm-proxy.gumroad.com) and activate:
+Free mode works with regex-only scanning. For full AI-powered detection (names, addresses, contextual secrets), subscribe at **[localguard.me](https://localguard.me/buy)**:
 
 ```bash
 llm-security-proxy activate
@@ -104,13 +149,11 @@ providers:
     path_prefix: "/v1"
 ```
 
-This works with any self-hosted model server, fine-tuned model endpoints, or internal LLM gateways.
-
 ## What gets redacted
 
 | Category | Examples |
 |----------|----------|
-| API keys | OpenAI, Anthropic, AWS, GitHub, Stripe, Slack, SendGrid |
+| API keys | OpenAI, Anthropic, AWS, GitHub, Stripe, Slack, SendGrid, Shopify |
 | Passwords | In plaintext, URLs, config files |
 | Credit cards | Visa, Mastercard, Amex (Luhn-validated) |
 | Emails & phones | RFC 5322 emails, international phone numbers |
@@ -120,12 +163,18 @@ This works with any self-hosted model server, fine-tuned model endpoints, or int
 | Personal names | Via contextual AI analysis (NER Stage 2) |
 | Locations | Cities, countries, addresses (NER Stage 2) |
 
-## License Tiers
+## Pricing
 
-| Tier | Price | Bind address | Use case |
-|------|-------|-------------|----------|
-| Pro | $49/year | localhost only | Single developer |
-| Team | $99/year | Any interface | Shared proxy for a team |
+| | Free | Personal |
+|------|------|---------|
+| Price | $0 | $39/year |
+| Regex scanning | Yes | Yes |
+| AI-powered NER | No | Yes |
+| Name/address detection | No | Yes |
+| Bind address | localhost | localhost |
+| Support | Community | Email |
+
+Subscribe at **[localguard.me](https://localguard.me/buy)**.
 
 ## Commands
 
@@ -148,19 +197,20 @@ llm-security-proxy check-config     # Validate config file
 
 ## FAQ
 
-**Lost your license key?**
-Run `llm-security-proxy activate` again with the same Gumroad key. It will restore your license.
-
-**Lost your Gumroad key?**
-Go to [gumroad.com](https://gumroad.com), click "I lost my license", enter your email.
-
-**Changed your computer?**
-A new machine requires a new license purchase. Each license is tied to one computer.
+**Can I use LocalGuard for free?**
+Yes. Free mode provides regex-only scanning (API keys, passwords, credit cards, emails, etc.). Subscribe for AI-powered detection of names, addresses, and contextual secrets.
 
 **How to update?**
+Desktop app updates automatically. CLI:
 ```bash
 llm-security-proxy update
 ```
+
+**Changed your computer?**
+Each license is tied to one machine fingerprint. Contact support to transfer.
+
+**Manage your subscription?**
+Visit the customer portal via the GUI or at [localguard.me](https://localguard.me).
 
 ## License
 
