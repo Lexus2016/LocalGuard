@@ -93,7 +93,7 @@ The setup wizard will ask which LLM providers you use and create a config file a
 
 ### 2. Get a license (optional)
 
-Free mode works with pattern-based scanning. For full deep contextual analysis (names, addresses, contextual secrets), subscribe at **[localguard.me](https://localguard.me/buy)**:
+Free mode works with pattern-based scanning. For full AI-powered detection (names, addresses, contextual secrets) — powered by a local AI model that runs entirely on your machine with zero data sent to external services — subscribe at **[localguard.me](https://localguard.me/buy)**:
 
 ```bash
 llm-security-proxy activate
@@ -174,8 +174,8 @@ This works with any self-hosted model server, fine-tuned model endpoints, or int
 | Tokens | JWT, Bearer tokens |
 | Financial | IBAN, crypto addresses (Bitcoin, Ethereum) |
 | Crypto keys | PEM private keys (RSA, EC, ED25519) |
-| Personal names | Via deep contextual analysis (Stage 2) |
-| Locations | Cities, countries, addresses (Stage 2) |
+| Personal names | Via local AI model (runs on your machine, nothing sent externally) |
+| Locations | Cities, countries, addresses (local AI model) |
 
 ## Pricing
 
@@ -183,7 +183,7 @@ This works with any self-hosted model server, fine-tuned model endpoints, or int
 |------|------|---------|
 | Price | $0 | $39/year |
 | Pattern-based scanning | Yes | Yes |
-| Deep contextual analysis | No | Yes |
+| Local AI model detection | No | Yes |
 | Name/address detection | No | Yes |
 | Bind address | localhost | localhost |
 | Support | Community | Email |
@@ -204,7 +204,7 @@ llm-security-proxy check-config     # Validate config file
 
 ## Performance
 
-- Deep analysis: 20-40ms per message (Apple Silicon)
+- Local AI analysis: 20-40ms per message (Apple Silicon)
 - Pattern scanning: <1ms
 - Memory: ~400MB RSS with model loaded
 - Tested with 100 concurrent agents at 0 errors
@@ -212,7 +212,7 @@ llm-security-proxy check-config     # Validate config file
 ## FAQ
 
 **Can I use LocalGuard for free?**
-Yes. Free mode provides pattern-based scanning (API keys, passwords, credit cards, emails, etc.). Subscribe for deep contextual analysis that detects names, addresses, and context-dependent secrets.
+Yes. Free mode provides pattern-based scanning (API keys, passwords, credit cards, emails, etc.). Subscribe for AI-powered detection of names, addresses, and context-dependent secrets. The AI model runs entirely on your machine — no data is sent to external services.
 
 **How to update?**
 Desktop app updates automatically. CLI:
