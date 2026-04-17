@@ -4,9 +4,27 @@
 
 ![How LocalGuard works](docs/assets/schema_en.png)
 
+## Desktop App
+
+LocalGuard comes with a native desktop app for macOS, Windows, and Linux. Start/stop the proxy, monitor intercepted secrets, configure providers, and manage your license — all from a single window.
+
+| Dashboard | Agent Protection | Configuration |
+|:---------:|:----------------:|:-------------:|
+| ![Dashboard](docs/assets/gui-dashboard.png) | ![Agents](docs/assets/gui-agents.png) | ![Config](docs/assets/gui-config.png) |
+
+Runs in your system tray — always on, always protecting.
+
+![System tray](docs/assets/gui-tray.png)
+
+## CLI
+
+For headless servers, CI/CD pipelines, or if you prefer the terminal:
+
+![CLI redaction demo](docs/assets/cli-redaction.png)
+
 ## Install
 
-### Desktop App (GUI)
+### Desktop App
 
 Download the desktop app for your platform:
 
