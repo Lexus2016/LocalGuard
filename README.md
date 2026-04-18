@@ -106,13 +106,13 @@ sudo mv llm-security-proxy /usr/local/bin/
 
 ## Quick Start
 
-### 1. Run interactive setup
+### 1. Start the proxy
 
 ```bash
-llm-security-proxy setup
+llm-security-proxy start
 ```
 
-The setup wizard will ask which LLM providers you use and create a config file automatically.
+On first run, LocalGuard creates a default config with all popular providers (OpenAI, Anthropic, DeepSeek, etc.). You're ready to go immediately.
 
 ### 2. Get a license (optional)
 
@@ -216,7 +216,6 @@ Subscribe at **[localguard.me](https://localguard.me/buy)**.
 ## Commands
 
 ```bash
-llm-security-proxy setup            # Interactive setup wizard
 llm-security-proxy start            # Start the proxy
 llm-security-proxy install          # Auto-start on boot (launchd/systemd)
 llm-security-proxy uninstall        # Remove auto-start
