@@ -24,18 +24,42 @@ For headless servers, CI/CD pipelines, or if you prefer the terminal:
 
 ## Install
 
-### Desktop App
+### Homebrew (macOS / Linux) — recommended
 
-Download the desktop app for your platform:
+```bash
+brew tap lexus2016/tap
+```
+
+**Desktop App (GUI):**
+```bash
+brew install --cask localguard
+```
+No Gatekeeper warnings — works immediately after install.
+
+**CLI:**
+```bash
+brew install localguard
+```
+
+**Auto-start on login:**
+```bash
+brew services start localguard
+```
+
+### Desktop App (manual download)
 
 | Platform | Download |
 |----------|----------|
 | macOS (Apple Silicon) | [LocalGuard.dmg](https://github.com/Lexus2016/LocalGuard/releases/latest) |
-| macOS (Intel) | [LocalGuard.dmg](https://github.com/Lexus2016/LocalGuard/releases/latest) |
 | Windows | [LocalGuard.msi](https://github.com/Lexus2016/LocalGuard/releases/latest) |
-| Linux | [LocalGuard.AppImage](https://github.com/Lexus2016/LocalGuard/releases/latest) / [.deb](https://github.com/Lexus2016/LocalGuard/releases/latest) |
+| Linux | [.deb](https://github.com/Lexus2016/LocalGuard/releases/latest) |
 
-### CLI (Command Line)
+> **macOS note:** If you downloaded the DMG manually (not via Homebrew), macOS Gatekeeper may block it. Run once:
+> ```bash
+> xattr -cr /Applications/LocalGuard.app
+> ```
+
+### CLI (script install)
 
 **macOS / Linux:**
 ```bash
@@ -47,6 +71,11 @@ curl -fsSL https://raw.githubusercontent.com/Lexus2016/LocalGuard/main/install.s
 irm https://raw.githubusercontent.com/Lexus2016/LocalGuard/main/install.ps1 | iex
 ```
 
+**Auto-start on boot (after script install):**
+```bash
+llm-security-proxy install
+```
+
 The installer downloads the binary and the detection model (~200MB total). Everything works out of the box after installation.
 
 ### Manual install
@@ -56,12 +85,6 @@ Download the archive for your platform from [Releases](https://github.com/Lexus2
 **macOS (Apple Silicon):**
 ```bash
 tar xzf llm-security-proxy-*-aarch64-apple-darwin.tar.gz
-sudo mv llm-security-proxy /usr/local/bin/
-```
-
-**macOS (Intel):**
-```bash
-tar xzf llm-security-proxy-*-x86_64-apple-darwin.tar.gz
 sudo mv llm-security-proxy /usr/local/bin/
 ```
 
@@ -195,6 +218,8 @@ Subscribe at **[localguard.me](https://localguard.me/buy)**.
 ```bash
 llm-security-proxy setup            # Interactive setup wizard
 llm-security-proxy start            # Start the proxy
+llm-security-proxy install          # Auto-start on boot (launchd/systemd)
+llm-security-proxy uninstall        # Remove auto-start
 llm-security-proxy activate         # Activate license
 llm-security-proxy license          # Show license status
 llm-security-proxy update           # Update to latest version
@@ -217,6 +242,8 @@ Yes. Free mode provides pattern-based scanning (API keys, passwords, credit card
 **How to update?**
 Desktop app updates automatically. CLI:
 ```bash
+brew upgrade localguard
+# or
 llm-security-proxy update
 ```
 
