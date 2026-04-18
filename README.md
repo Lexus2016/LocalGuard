@@ -216,13 +216,17 @@ Subscribe at **[localguard.me](https://localguard.me/buy)**.
 ## Commands
 
 ```bash
-llm-security-proxy start            # Start the proxy
+llm-security-proxy start            # Start the proxy (auto-creates config on first run)
+llm-security-proxy stop             # Stop the running daemon
+llm-security-proxy status           # Show daemon status
+llm-security-proxy restart          # Restart the daemon
 llm-security-proxy install          # Auto-start on boot (launchd/systemd)
 llm-security-proxy uninstall        # Remove auto-start
 llm-security-proxy activate         # Activate license
 llm-security-proxy license          # Show license status
-llm-security-proxy update           # Update to latest version
-llm-security-proxy stats            # Show statistics
+llm-security-proxy fingerprint      # Show machine fingerprint
+llm-security-proxy update           # Check for updates / update to latest
+llm-security-proxy stats            # Show protection statistics
 llm-security-proxy check-config     # Validate config file
 ```
 
