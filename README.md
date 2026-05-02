@@ -51,8 +51,8 @@ brew services start localguard
 | Platform | Download |
 |----------|----------|
 | macOS (Apple Silicon) | [LocalGuard.dmg](https://github.com/Lexus2016/LocalGuard/releases/latest) |
-| Linux | [.deb](https://github.com/Lexus2016/LocalGuard/releases/latest) |
-| Windows | Coming soon |
+| Linux (x64) | [.deb](https://github.com/Lexus2016/LocalGuard/releases/latest) / [.AppImage](https://github.com/Lexus2016/LocalGuard/releases/latest) |
+| Windows (x64) | [LocalGuard_*.msi](https://github.com/Lexus2016/LocalGuard/releases/latest) |
 
 > **macOS note:** If you downloaded the DMG manually (not via Homebrew), macOS Gatekeeper may block it. Run once:
 > ```bash
@@ -95,7 +95,17 @@ tar xzf llm-security-proxy-*-aarch64-unknown-linux-gnu.tar.gz
 sudo mv llm-security-proxy /usr/local/bin/
 ```
 
-**Windows:** Coming soon.
+**Windows (x86_64):**
+```powershell
+tar -xzf llm-security-proxy-*-x86_64-pc-windows-msvc.tar.gz
+# Move llm-security-proxy.exe to a directory in your PATH
+```
+
+**Windows (ARM64):**
+```powershell
+tar -xzf llm-security-proxy-*-aarch64-pc-windows-msvc.tar.gz
+# Move llm-security-proxy.exe to a directory in your PATH
+```
 
 ## Quick Start
 
