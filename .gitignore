@@ -1,0 +1,33 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# IDE
+.idea/
+.vscode/
+
+# Build artifacts
+node_modules/
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Environment
+.env
+.env.local
+
+# macOS
+*.dmg
+
+# Linux
+*.AppImage
+*.deb
+
+# Windows
+*.exe
