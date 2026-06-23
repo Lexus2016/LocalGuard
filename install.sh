@@ -115,6 +115,15 @@ if [ -n "$models_src" ]; then
   mkdir -p "$models_dst"
   cp -R "$models_src/." "$models_dst/" 2>/dev/null || true
   ok "Installed NER models → $models_dst"
+  # Mirror the Homebrew formula: expose models at ~/.llm-proxy/models so the
+  # daemon finds them when advanced (NER) detection is enabled in the config.
+  user_models="$HOME/.llm-proxy/models"
+  if [ ! -e "$user_models" ] && [ ! -L "$user_models" ]; then
+    mkdir -p "$HOME/.llm-proxy"
+    if ln -s "$models_dst" "$user_models" 2>/dev/null; then
+      ok "Linked $user_models → $models_dst"
+    fi
+  fi
 else
   info "No NER models in archive — running in regex-only mode (set 'advanced.path' in config to enable NER)."
 fi
