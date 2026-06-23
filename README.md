@@ -48,6 +48,8 @@ This installs the `localguard` command (the legacy name `llm-security-proxy` als
 Start the proxy, then launch a client pre-configured to route through it. Secrets in
 requests are redacted before they reach the provider and restored in the response:
 
+> **Note:** `launch` is a command-line feature — install the CLI (above) to use it. Desktop-app users start and manage their agents from the app itself.
+
 ```bash
 localguard start                 # start the local proxy daemon
 localguard status                # check it's running
