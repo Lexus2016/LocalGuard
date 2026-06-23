@@ -109,10 +109,14 @@ src="$(find "$tmp" -type f -name "$BIN" 2>/dev/null | head -1)"
 
 # ── install binary + alias symlink ───────────────────────────────
 chmod +x "$src"
-mv -f "$src" "$BIN_DIR/$BIN"
-ln -sf "$BIN" "$BIN_DIR/$ALIAS"
+mv -f "$src" "$BIN_DIR/$BIN" || die "cannot install to $BIN_DIR (is it writable?)"
 ok "Installed $BIN_DIR/$BIN"
-ok "Created command '$ALIAS' → $BIN"
+# The `localguard` alias is a convenience — don't fail the install if it can't be made.
+if ln -sf "$BIN" "$BIN_DIR/$ALIAS" 2>/dev/null; then
+  ok "Created command '$ALIAS' → $BIN"
+else
+  warn "Could not create the '$ALIAS' alias; use '$BIN' instead."
+fi
 
 # ── optional NER models (advanced detection) ─────────────────────
 # Never fatal: the proxy works in regex-only mode without these.
