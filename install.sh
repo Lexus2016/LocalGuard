@@ -49,6 +49,10 @@ case "$os" in
     target="${arch}-unknown-linux-gnu"
     ;;
   Darwin)
+    # Apple Silicon under Rosetta reports x86_64 via uname; trust the hardware.
+    if [ "$arch" = "x86_64" ] && [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ]; then
+      arch="aarch64"
+    fi
     if [ "$arch" != "aarch64" ]; then
       die "no prebuilt CLI for macOS Intel. Install via Homebrew instead:
        brew tap lexus2016/tap https://github.com/Lexus2016/homebrew-tap
@@ -66,9 +70,9 @@ if [ -z "$TAG" ]; then
   info "Resolving latest release..."
   TAG="$($DL "https://api.github.com/repos/$REPO/releases/latest" \
         | grep '"tag_name"' \
-        | sed -E 's/.*"tag_name"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/' \
-        | head -1)"
-  [ -n "$TAG" ] || die "could not determine latest release tag (set LOCALGUARD_VERSION=vX.Y.Z)"
+        | head -1 \
+        | cut -d'"' -f4)"
+  [ -n "$TAG" ] || die "could not determine latest release tag (check network, or set LOCALGUARD_VERSION=vX.Y.Z)"
 fi
 
 asset="${BIN}-${TAG}-${target}.tar.gz"
@@ -77,10 +81,12 @@ url="https://github.com/$REPO/releases/download/${TAG}/${asset}"
 # ── pick install dir ─────────────────────────────────────────────
 if [ -n "${LOCALGUARD_BIN_DIR:-}" ]; then
   BIN_DIR="$LOCALGUARD_BIN_DIR"
-elif [ -w /usr/local/bin ] 2>/dev/null; then
+elif [ -w /usr/local/bin ]; then
   BIN_DIR="/usr/local/bin"
-else
+elif [ -n "${HOME:-}" ]; then
   BIN_DIR="$HOME/.local/bin"
+else
+  die "cannot determine an install dir (set LOCALGUARD_BIN_DIR)"
 fi
 mkdir -p "$BIN_DIR" || die "cannot create install dir: $BIN_DIR"
 PREFIX="$(dirname "$BIN_DIR")"
@@ -109,27 +115,29 @@ ok "Installed $BIN_DIR/$BIN"
 ok "Created command '$ALIAS' → $BIN"
 
 # ── optional NER models (advanced detection) ─────────────────────
+# Never fatal: the proxy works in regex-only mode without these.
 models_src="$(find "$tmp" -type d -name models 2>/dev/null | head -1)"
-if [ -n "$models_src" ]; then
-  models_dst="$PREFIX/share/localguard/models"
-  mkdir -p "$models_dst"
-  cp -R "$models_src/." "$models_dst/" 2>/dev/null || true
+models_dst="$PREFIX/share/localguard/models"
+if [ -n "$models_src" ] && mkdir -p "$models_dst" 2>/dev/null && cp -R "$models_src/." "$models_dst/" 2>/dev/null; then
   ok "Installed NER models → $models_dst"
   # Mirror the Homebrew formula: expose models at ~/.llm-proxy/models so the
   # daemon finds them when advanced (NER) detection is enabled in the config.
-  user_models="$HOME/.llm-proxy/models"
-  if [ ! -e "$user_models" ] && [ ! -L "$user_models" ]; then
-    mkdir -p "$HOME/.llm-proxy"
-    if ln -s "$models_dst" "$user_models" 2>/dev/null; then
-      ok "Linked $user_models → $models_dst"
+  # Skip as root (e.g. via sudo) to avoid root-owned files in a user's home
+  # that the daemon later can't write.
+  if [ "$(id -u)" != 0 ] && [ -n "${HOME:-}" ]; then
+    user_models="$HOME/.llm-proxy/models"
+    if [ ! -e "$user_models" ] && [ ! -L "$user_models" ]; then
+      mkdir -p "$HOME/.llm-proxy" 2>/dev/null \
+        && ln -s "$models_dst" "$user_models" 2>/dev/null \
+        && ok "Linked $user_models → $models_dst" || true
     fi
   fi
 else
-  info "No NER models in archive — running in regex-only mode (set 'advanced.path' in config to enable NER)."
+  info "NER models not installed — running in regex-only mode (enable 'advanced' in config for NER)."
 fi
 
 # ── PATH hint ────────────────────────────────────────────────────
-case ":$PATH:" in
+case ":${PATH:-}:" in
   *":$BIN_DIR:"*) : ;;
   *) warn "$BIN_DIR is not in your PATH. Add it, e.g.:
        echo 'export PATH=\"$BIN_DIR:\$PATH\"' >> ~/.profile && . ~/.profile" ;;
