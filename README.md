@@ -2,81 +2,41 @@
 
 > Protect your secrets from AI agents
 
-**LocalGuard** — a local proxy that redacts confidential data before sending it to LLM providers. Works with any AI agents: Claude Code, ChatGPT, Codex CLI, Aider, and others.
+**LocalGuard** is a desktop app that sits between your AI coding tools and the AI providers. It finds API keys, passwords, card numbers, emails and names in every request and replaces them before they leave your machine. Works with Claude Code, Codex CLI, Gemini CLI, OpenCode, Aider and others.
 
 ## What it does
 
-- **Intercepts** API keys, tokens, passwords, PII, crypto wallets, PEM keys
-- **Runs 100% locally** — no data leaves your machine
-- **Adds <50ms latency** per request
-- **Supports** macOS, Linux, Windows
+- **Finds** API keys, tokens, passwords, private keys, card numbers, IBANs, crypto wallets, emails, phone numbers, names and addresses
+- **Runs 100% locally** — pattern matching plus an on-device AI model; nothing is sent anywhere for analysis
+- **Restores** the original values in the answer, so your tools work as before
+- **Supports** macOS (Apple Silicon), Windows, Linux
 
 ## Pricing
 
-| Plan | Price | What's included |
-|------|-------|---------------|
-| **Free** | $0 | API keys, Bearer/JWT tokens, AWS/GitHub keys, PEM, crypto wallets, IBAN |
-| **Pro** | $39/year (~$3.25/mo) | Free + credit cards, email, phones, passwords, PII, real-time dashboard |
-| **Enterprise** | Contact us | Pro + 2 server licenses, extended detection rules, AI tuning, priority support |
+| | |
+|---|---|
+| **Without a subscription** | Detect-only: LocalGuard shows what your tools send and to which provider, but changes nothing |
+| **Subscription** | **EUR 5 for the first month, then EUR 49/year + VAT** · cancel anytime · one computer |
+| **Enterprise** | Server deployment and the console proxy — [support@localguard.me](mailto:support@localguard.me) |
 
 ## Install
 
-### Desktop app
+Download from [localguard.me/download](https://localguard.me/download.html) or [Releases](https://github.com/Lexus2016/LocalGuard/releases):
 
-Download from [localguard.me/download](https://localguard.me/download.html) or [Releases](https://github.com/Lexus2016/LocalGuard/releases): `.dmg` (macOS, Apple Silicon — signed and notarized by Apple) · `.AppImage` / `.deb` (Linux) · `.exe` (Windows)
+- **macOS** (Apple Silicon) — `.dmg`, signed and notarized by Apple
+- **Windows** — `setup.exe`
+- **Linux** — `.AppImage` or `.deb`
 
-### CLI / console proxy
+Installed apps update themselves.
 
-One-line install (macOS arm64 · Linux x86_64 / arm64):
+## Quick start
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/Lexus2016/LocalGuard/main/install.sh | sh
-```
+1. Install and launch LocalGuard — it lives in your menu bar / system tray.
+2. Connect your AI tools in one click (Claude Code, Codex CLI, Gemini CLI, OpenCode, Aider, …).
+3. Use them as usual — the Home tab shows what they send.
+4. Turn on protection in **Settings → Subscription**.
 
-This installs the `localguard` command (the legacy name `llm-security-proxy` also works).
-
-## Run your AI tools through the proxy
-
-Start the proxy, then launch a client pre-configured to route through it. Secrets in
-requests are redacted before they reach the provider and restored in the response:
-
-> **Note:** `launch` is a command-line feature — install the CLI (above) to use it. Desktop-app users start and manage their agents from the app itself.
-
-```bash
-localguard start                 # start the local proxy daemon
-localguard status                # check it's running
-
-localguard launch opencode       # OpenCode
-localguard launch claude-code    # Claude Code (Anthropic)
-localguard launch codex          # Codex CLI
-localguard launch aider          # aider (OpenAI + Anthropic)
-localguard launch gemini-cli     # Gemini CLI
-```
-
-Supported clients: `claude-code`, `aider`, `goose`, `qwen-code`, `gemini-cli`, `opencode`, `zed`, `sgpt`, `codex`.
-
-Narrow a multi-provider client to a single upstream, or forward extra arguments to the
-client after `--`:
-
-```bash
-localguard launch aider --provider anthropic
-localguard launch claude-code -- --model claude-sonnet-4-6
-```
-
-`launch` starts the daemon if it isn't running, points the client's base URL at the
-local proxy, and uses your existing provider API key as-is — it does not manage or store
-keys, so the client must already be authenticated. Clients with hardcoded endpoints
-(Cursor, Windsurf) are not supported.
-
-## Quick Start
-
-1. Install LocalGuard
-2. Activate your license
-3. Select detection mode: Full / Regex Only / Off
-4. Configure your AI agents (Claude Code, Codex CLI, etc.)
-5. Monitor Dashboard and Logs
-
-Detailed guide: [localguard.me/guide](https://localguard.me/guide)
+Step-by-step guide: [localguard.me/guide](https://localguard.me/guide.html)
 
 ## Contact
 
