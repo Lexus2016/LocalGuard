@@ -23,8 +23,7 @@
 
 ### Desktop app
 
-- **macOS** — `brew install --cask localguard`
-- Or download from [Releases](https://github.com/Lexus2016/LocalGuard/releases): `.dmg` (macOS) · `.AppImage` / `.deb` (Linux) · `.exe` (Windows)
+Download from [localguard.me/download](https://localguard.me/download.html) or [Releases](https://github.com/Lexus2016/LocalGuard/releases): `.dmg` (macOS, Apple Silicon — signed and notarized by Apple) · `.AppImage` / `.deb` (Linux) · `.exe` (Windows)
 
 ### CLI / console proxy
 
@@ -32,13 +31,6 @@ One-line install (macOS arm64 · Linux x86_64 / arm64):
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Lexus2016/LocalGuard/main/install.sh | sh
-```
-
-Or via Homebrew:
-
-```bash
-brew tap lexus2016/tap https://github.com/Lexus2016/homebrew-tap
-brew install localguard
 ```
 
 This installs the `localguard` command (the legacy name `llm-security-proxy` also works).
