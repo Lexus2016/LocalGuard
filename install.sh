@@ -54,10 +54,8 @@ case "$os" in
       arch="aarch64"
     fi
     if [ "$arch" != "aarch64" ]; then
-      die "no prebuilt CLI for macOS Intel. Install via Homebrew instead:
-       brew tap lexus2016/tap https://github.com/Lexus2016/homebrew-tap
-       brew install localguard
-     or build from source: https://github.com/$REPO"
+      die "macOS on Intel is not supported — LocalGuard ships for Apple Silicon only.
+     Building from source is still possible: https://github.com/$REPO"
     fi
     target="aarch64-apple-darwin"
     ;;
@@ -124,7 +122,7 @@ models_src="$(find "$tmp" -type d -name models 2>/dev/null | head -1)"
 models_dst="$PREFIX/share/localguard/models"
 if [ -n "$models_src" ] && mkdir -p "$models_dst" 2>/dev/null && cp -R "$models_src/." "$models_dst/" 2>/dev/null; then
   ok "Installed NER models → $models_dst"
-  # Mirror the Homebrew formula: expose models at ~/.llm-proxy/models so the
+  # Also expose models at ~/.llm-proxy/models so the
   # daemon finds them when advanced (NER) detection is enabled in the config.
   # Skip as root (e.g. via sudo) to avoid root-owned files in a user's home
   # that the daemon later can't write.
