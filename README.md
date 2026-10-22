@@ -4,6 +4,12 @@
 
 **LocalGuard** is a desktop app that sits between your AI coding tools and the AI providers. It finds API keys, passwords, card numbers, emails and names in every request and replaces them before they leave your machine. Works with Claude Code, Codex CLI, Gemini CLI, OpenCode, Aider and others.
 
+## Demo
+
+<a href="docs/media/localguard-promo.mp4"><img src="docs/media/localguard-promo-poster.jpg" alt="Watch the demo" width="300"></a>
+
+[Watch the demo](docs/media/localguard-promo.mp4)
+
 ## What it does
 
 - **Finds** API keys, tokens, passwords, private keys, card numbers, IBANs, crypto wallets, emails, phone numbers, names and addresses
